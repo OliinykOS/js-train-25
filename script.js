@@ -142,12 +142,12 @@ async function* asyncGenerator() {
     // Цикл "while (true)" - це безкінечний цикл, який продовжуватиме виконуватися, поки його не зупинять зовні.
     while (true) {
         // Чекаємо поки виконається проміс якому встановимо затримку 1 секунду за допомогою setTimeout
-        await new Promice((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         // Віддаємо значення лічильника та збільшуємо його на один
-        yield i;
-        i++;
+        yield i++;
     }
 }
+
 // Використовуємо асинхронний генератор та записуємо його значення в константу gen
 const gen = asyncGenerator();
 
@@ -155,16 +155,17 @@ const gen = asyncGenerator();
 async function printFiveItems() {
     // Ключові слова "for await" використовуються для ітерації по асинхронним ітерабельним об'єктам.
     // Перебираємо значення gen
-    for await (const value of gen) {
+    for await (let value of gen) {
         // Виводимо в консоль поточне значення
         console.log(value);
         // Умова "if (value === 4) break" зупиняє цикл після виведення п'яти чисел (від 0 до 4).
         if (value === 4) break;
     }
 }
+
 // Розкоментуйте після виконання завданння
-console.log("Завдання: 5 ==============================");
-printFiveItems();
+// console.log("Завдання: 5 ==============================");
+// printFiveItems();
 
 //Завдання 6
 
@@ -231,29 +232,29 @@ displayData();
 
 //Завдання 7
 // Створюємо генератор countdownGenerator, який створює послідовність чисел від вказаного значення до 0, має параметр start
-async function* countdownGenerator(start) {
+function* countdownGenerator(start) {
     // Ініціюємо лічильник змінну count зі стартовим значенням параметра start
     let count = start;
+
     // Цикл, що триває доки лічильник більший або рівний 0
     while (count >= 0) {
         // Використовуємо ключове слово yield, щоб повернути поточне значення лічильника
         yield count;
-        // Зменшуємо лічильник на 1
+
+        // Зменшуємо лічильник
         count--;
     }
 }
-console.log("Завдання: 7 ==============================");
-// Створюємо екземпляр генератора countdown з лічильниковм 5
-const result = countdownGenerator(5);
 
-// Запускаємо генератор та отримуємо перше значення яку записуємо в змінну nextValue
-//let nextValue = await result.next();
-//console.log(nextValue.value);
+// Створюємо екземпляр генератора countdown
+let countdown = countdownGenerator(5);
+console.log("Завдання: 7 ==============================");
+
+let nextValue = countdown.next(); // Запускаємо генератор та отримуємо перше значення яку записуємо в змінну nextValue
 // Цикл while, що виводить значення з генератора, та працює поки не є генератор вичерпаним.
 // Якщо властивість done == false, генератор ще має значення для повернення.
-//while () {
-// Виводимо поточне значення
-//    console.log(nextValue);
-// Отримуємо наступне значення з генератора
-//    nextValue = await result.next();
-//}
+
+while (!nextValue.done) {
+    console.log(nextValue.value); // Виводимо поточне значення
+    nextValue = countdown.next(); // Отримуємо наступне значення з генератора
+}
